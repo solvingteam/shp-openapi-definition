@@ -91,12 +91,12 @@ paths:
         - in: query
           name: page
           schema:
-            type: integer
+            type: number
           required: false
         - in: query
           name: pageSize
           schema:
-            type: integer
+            type: number
           required: false
         - in: query
           name: start
@@ -133,7 +133,89 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/MeasuresResponse'
+                $ref: '#/components/schemas/MeasureResponseList'
+
+  /threshold:
+    get:
+      tags:
+        - Threshold
+      operationId: thresholdGet
+      responses:
+        '200':
+          description: successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ThresholdResponseList'
+    post:
+      tags:
+        - Threshold
+      operationId: thresholdPost
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThresholdRequest'
+        required: true
+      parameters:
+        - in: query
+          name: sub
+          schema:
+            type: string
+          description: sub parameter is optional , if not provided the profile's sub is used
+      responses:
+        '201':
+          description: created
+  
+  /threshold/{idThreshold}:
+    put:
+      tags:
+        - Threshold
+      operationId: thresholdPut
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThresholdRequest'
+        required: true
+      parameters:
+        - name: idThreshold
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: sub
+          schema:
+            type: string
+          description: sub parameter is optional , if not provided the profile's sub is used
+      responses:
+        '200':
+          description: successfull
+    delete:
+      tags:
+        - Threshold
+      operationId: thresholdDelete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ThresholdRequest'
+        required: true
+      parameters:
+        - name: idThreshold
+          in: path
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: sub
+          schema:
+            type: string
+          description: sub parameter is optional , if not provided the profile's sub is used
+      responses:
+        '200':
+          description: successfull
 
 components:
   schemas:
@@ -157,8 +239,8 @@ components:
           type: string
           format: string
         expiresIn:
-          type: integer
-          format: integer
+          type: number
+          format: number
         tokenType:
           type: string
           format: string
@@ -260,7 +342,7 @@ components:
               value:
                 type: string
 
-    MeasuresResponse:
+    MeasureResponseList:
       type: object
       properties:
         content:
@@ -268,9 +350,50 @@ components:
           items:
             $ref: '#/components/schemas/MeasureResponse'
         totalPages:
-          type: integer
+          type: number
         totalElements:
-          type: integer
+          type: number
 
+    ThresholdResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        maxHigh:
+          type: number
+        maxMedium:
+          type: number
+        minLow:
+          type: number
+        minMedium:
+          type: number
+        measureCode:
+          type: string
+        sub:
+          type: string
+        gender:
+          type: string
 
+    ThresholdResponseList:
+      type: array
+      items:
+        $ref: '#/components/schemas/ThresholdResponse'
+
+    ThresholdRequest:
+      type: object
+      properties:
+        maxHigh:
+          type: number
+        maxMedium:
+          type: number
+        minLow:
+          type: number
+        minMedium:
+          type: number
+        measureCode:
+          type: string
+        sub:
+          type: string
+        gender:
+          type: string
 
