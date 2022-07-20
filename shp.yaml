@@ -6,4 +6,271 @@ info:
 servers:
   - url: 'https://shp.default.cluster.solvingteam.it'
 paths:
-  
+  /authentication/api/signin:
+    post:
+      tags:
+        - Authentication
+      operationId: authenticationApiSignin
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SigninRequest'
+        required: true
+      responses:
+        '200':
+          description: successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessTokenResponse'
+
+  /authentication/api/profile:
+    get:
+      tags:
+        - Authentication
+      operationId: authenticationApiProfile
+      responses:
+        '200':
+          description: successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+
+  /authentication/api/attributes:
+    put:
+      tags:
+        - Authentication
+      operationId: authenticationApiAttributes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProfileAttributesRequest'
+        required: true
+      responses:
+        '200':
+          description: successfull
+
+  /data-acquisition/measure:
+    post:
+      tags:
+        - Measures
+      operationId: dataAcquisitionMeasure
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeasureRequest'
+        required: true
+      responses:
+        '200':
+          description: successfull
+
+  /data-acquisition/measure/bulk:
+    post:
+      tags:
+        - Measures
+      operationId: dataAcquisitionMeasureBulk
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MeasureRequestBulk'
+        required: true
+      responses:
+        '200':
+          description: successfull
+  /data-reader/measure:
+    get:
+      tags:
+        - Measures
+      operationId: dataReaderMeasure
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+          required: false
+        - in: query
+          name: pageSize
+          schema:
+            type: integer
+          required: false
+        - in: query
+          name: start
+          schema:
+            type: string
+            format: date-time
+          required: false
+        - in: query
+          name: end
+          schema:
+            type: string
+            format: date-time
+          required: false
+        - in: query
+          name: codes
+          schema:
+            type: array
+            items:
+              type: string
+          required: false
+        - in: query
+          name: sub
+          schema:
+            type: string
+          required: false
+        - in: query
+          name: last
+          schema:
+            type: boolean
+          required: false
+      responses:
+        '200':
+          description: successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeasuresResponse'
+
+components:
+  schemas:
+    SigninRequest:
+      type: object
+      properties:
+        password:
+          type: string
+          format: string
+        username:
+          type: string
+          format: string
+        deviceToken:
+          type: string
+          format: string
+
+    AccessTokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          format: string
+        expiresIn:
+          type: integer
+          format: integer
+        tokenType:
+          type: string
+          format: string
+        refreshToken:
+          type: string
+          format: string
+        idToken:
+          type: string
+          format: string
+
+    ProfileResponse:
+      type: object
+      properties:
+        username:
+          type: string
+          format: string
+        sub:
+          type: string
+          format: string
+        clientId:
+          type: string
+          format: string
+        authorities:
+          type: array
+          items:
+            type: string
+        attributes:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: string
+
+    ProfileAttributesRequest:
+      type: array
+      items:
+        type: object
+        properties:
+          name:
+            type: string
+          value:
+            type: string
+
+    MeasureRequest:
+      type: object
+      properties:
+        code:
+          type: string
+          format: string
+        value:
+          type: string
+          format: string
+        date:
+          type: string
+          format: date-time
+        metadata:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: string
+
+    MeasureRequestBulk:
+      type: array
+      items:
+        $ref: '#/components/schemas/MeasureRequest'
+
+    MeasureResponse:
+      type: object
+      properties:
+        sub:
+          type: string
+          format: string
+        clientId:
+          type: string
+          format: string
+        code:
+          type: string
+          format: string
+        value:
+          type: string
+          format: string
+        date:
+          type: string
+          format: date-time
+        metadata:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+              value:
+                type: string
+
+    MeasuresResponse:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeasureResponse'
+        totalPages:
+          type: integer
+        totalElements:
+          type: integer
+
+
+
