@@ -38,6 +38,25 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProfileResponse'
 
+  /authentication/api/{sub}/profile:
+    get:
+      tags:
+        - Authentication
+      operationId: authenticationApiProfile
+      parameters:
+        - name: sub
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProfileResponse'
+
   /authentication/api/attributes:
     put:
       tags:
@@ -103,14 +122,14 @@ paths:
           schema:
             type: string
             pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-            example: 2022-07-19T14:59:58+02:00
+            example: "2022-07-19T14:59:58+02:00"
           required: false
         - in: query
           name: end
           schema:
             type: string
             pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-            example: 2022-07-19T14:59:58+02:00
+            example: "2022-07-19T14:59:58+02:00"
           required: false
         - in: query
           name: codes
@@ -301,7 +320,7 @@ components:
         date:
           type: string
           pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-          example: 2022-07-19T14:59:58+02:00
+          example: "2022-07-19T14:59:58+02:00"
         metadata:
           type: array
           items:
@@ -335,7 +354,7 @@ components:
         date:
           type: string
           pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-          example: 2022-07-19T14:59:58+02:00
+          example:  "2022-07-19T14:59:58+02:00"
         metadata:
           type: array
           items:
