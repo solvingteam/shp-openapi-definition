@@ -6,7 +6,7 @@ info:
 servers:
   - url: 'https://shp.default.cluster.solvingteam.it'
 paths:
-  /authentication/api/signin:
+  /api/authentication/signin:
     post:
       tags:
         - Authentication
@@ -25,7 +25,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/AccessTokenResponse'
 
-  /authentication/api/profile:
+  /api/authentication/profile:
     get:
       tags:
         - Authentication
@@ -38,7 +38,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProfileResponse'
 
-  /authentication/api/{sub}/profile:
+  /api/authentication/{sub}/profile:
     get:
       tags:
         - Authentication
@@ -57,7 +57,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProfileResponse'
 
-  /authentication/api/attributes:
+  /api/authentication/attributes:
     put:
       tags:
         - Authentication
@@ -72,7 +72,7 @@ paths:
         '200':
           description: successfull
 
-  /data-acquisition/measure:
+  /api/data-acquisition/measure:
     post:
       tags:
         - Measures
@@ -87,7 +87,7 @@ paths:
         '200':
           description: successfull
 
-  /data-acquisition/measure/bulk:
+  /api/data-acquisition/measure/bulk:
     post:
       tags:
         - Measures
@@ -101,7 +101,7 @@ paths:
       responses:
         '200':
           description: successfull
-  /data-reader/measure:
+  /api/data-reader/measure:
     get:
       tags:
         - Measures
@@ -156,7 +156,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/MeasureResponseList'
 
-  /threshold:
+  /api/threshold:
     get:
       tags:
         - Threshold
@@ -188,7 +188,7 @@ paths:
         '201':
           description: created
   
-  /threshold/{idThreshold}:
+  /api/threshold/{idThreshold}:
     put:
       tags:
         - Threshold
