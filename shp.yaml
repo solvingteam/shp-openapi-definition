@@ -72,6 +72,96 @@ paths:
         '200':
           description: successfull
 
+  /api/event/global:
+    get:
+      tags:
+        - Event
+      operationId: apiEventGlobal
+      parameters:
+        - name: start
+          in: query
+          required: true
+          schema:
+            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+            example: "2022-08-01T14:59:58+02:00"
+        - name: end
+          in: query
+          required: true
+          schema:
+            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+            example: "2022-08-31T14:59:58+02:00"
+      responses:
+        '200':
+          description: successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+
+  /api/event/global/bulk:
+    get:
+      tags:
+        - Event
+      operationId: apiEventGlobalBulk
+      parameters:
+        - name: start
+          in: query
+          required: true
+          schema:
+            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+            example: "2022-08-01T14:59:58+02:00"
+        - name: query
+          in: path
+          required: true
+          schema:
+            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+            example: "2022-08-31T14:59:58+02:00"
+      responses:
+        '200':
+          description: successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventBulkResponse'
+
+  /api/event/:
+    get:
+      tags:
+        - Event
+      operationId: apiEvent
+      parameters:
+        - name: start
+          in: query
+          required: true
+          schema:
+            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+            example: "2022-08-01T14:59:58+02:00"
+        - name: end
+          in: query
+          required: true
+          schema:
+            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+            example: "2022-08-31T14:59:58+02:00"
+        - name: sub
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: last
+          in: query
+          required: false
+          schema:
+            type: boolean
+
+      responses:
+        '200':
+          description: successfull
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EventResponse'
+
+
   /api/data-acquisition/measure:
     post:
       tags:
@@ -156,6 +246,87 @@ paths:
               schema:
                 $ref: '#/components/schemas/MeasureResponseList'
 
+  /api/process:
+    post:
+      tags:
+        - Process
+      operationId: saveProcess
+      parameters:
+        - in: query
+          name: sub
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveProcessRequest'
+        required: true
+      responses:
+        '201':
+          description: created
+    get:
+      tags:
+        - Process
+      operationId: getProcess
+      parameters:
+        - name: sub
+          in: query
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successfull
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ProcessResponse'
+
+
+  /api/process/{id}:
+    put:
+      tags:
+        - Process
+      operationId: editProcess
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+        - in: query
+          name: sub
+          schema:
+            type: string
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveProcessRequest'
+        required: true
+      responses:
+        '201':
+          description: created
+    delete:
+      tags:
+        - Process
+      operationId: deleteProcess
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+      responses:
+        '200':
+          description: successful
+
+
   /api/threshold:
     get:
       tags:
@@ -167,7 +338,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ThresholdResponseList'
+                $ref: '#/components/schemas/ProcessResponse'
     post:
       tags:
         - Threshold
@@ -420,3 +591,110 @@ components:
         gender:
           type: string
 
+    EventResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        sub:
+          type: string
+        type:
+          type: string
+        alertLevel:
+          type: string
+        details:
+          type: object
+        createdAt:
+          type: string
+        text:
+          type: string
+
+    EventBulkResponse:
+      type: object
+      properties:
+        sub:
+          type: string
+        type:
+          type: string
+        events:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventResponse'
+
+    ProcessResponse:
+      type: object
+      properties:
+        id:
+          type: string
+        sub:
+          type: string
+        active:
+          type: boolean
+        trigger:
+          type: object
+          properties:
+            type:
+              type: string
+            parameters:
+              type: object
+              additionalProperties:
+                type: string
+        conditions:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              parameters:
+                type: object
+                additionalProperties:
+                  type: string
+        actions:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              parameters:
+                type: object
+                additionalProperties:
+                  type: string
+
+    SaveProcessRequest:
+      type: object
+      properties:
+        active:
+          type: boolean
+        trigger:
+          type: object
+          properties:
+            type:
+              type: string
+            parameters:
+              type: object
+              additionalProperties:
+                type: string
+        conditions:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              parameters:
+                type: object
+                additionalProperties:
+                  type: string
+        actions:
+          type: array
+          items:
+            type: object
+            properties:
+              type:
+                type: string
+              parameters:
+                type: object
+                additionalProperties:
+                  type: string
