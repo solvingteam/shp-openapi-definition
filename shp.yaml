@@ -73,23 +73,15 @@ paths:
           description: successfull
 
   /api/event/global:
-    get:
+    post:
       tags:
         - Event
       operationId: apiEventGlobal
-      parameters:
-        - name: start
-          in: query
-          required: true
-          schema:
-            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-            example: "2022-08-01T14:59:58+02:00"
-        - name: end
-          in: query
-          required: true
-          schema:
-            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-            example: "2022-08-31T14:59:58+02:00"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchEventGlobalRequest'
       responses:
         '200':
           description: successfull
@@ -99,23 +91,15 @@ paths:
                 $ref: '#/components/schemas/EventResponse'
 
   /api/event/global/bulk:
-    get:
+    post:
       tags:
         - Event
       operationId: apiEventGlobalBulk
-      parameters:
-        - name: start
-          in: query
-          required: true
-          schema:
-            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-            example: "2022-08-01T14:59:58+02:00"
-        - name: query
-          in: path
-          required: true
-          schema:
-            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-            example: "2022-08-31T14:59:58+02:00"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchEventGlobalRequest'
       responses:
         '200':
           description: successfull
@@ -125,33 +109,15 @@ paths:
                 $ref: '#/components/schemas/EventBulkResponse'
 
   /api/event/:
-    get:
+    post:
       tags:
         - Event
       operationId: apiEvent
-      parameters:
-        - name: start
-          in: query
-          required: true
-          schema:
-            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-            example: "2022-08-01T14:59:58+02:00"
-        - name: end
-          in: query
-          required: true
-          schema:
-            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-            example: "2022-08-31T14:59:58+02:00"
-        - name: sub
-          in: query
-          required: true
-          schema:
-            type: string
-        - name: last
-          in: query
-          required: false
-          schema:
-            type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchEventRequest'
 
       responses:
         '200':
@@ -590,6 +556,30 @@ components:
           type: string
         gender:
           type: string
+
+    SearchEventGlobalRequest:
+      type: object
+      properties:
+        start:
+          pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+          example: "2022-08-01T14:59:58+02:00"
+        end:
+          pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+          example: "2022-08-31T14:59:58+02:00"
+
+    SearchEventRequest:
+      type: object
+      properties:
+        start:
+          pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+          example: "2022-08-01T14:59:58+02:00"
+        end:
+          pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+          example: "2022-08-31T14:59:58+02:00"
+        sub:
+          type: string
+        last:
+          type: boolean
 
     EventResponse:
       type: object
