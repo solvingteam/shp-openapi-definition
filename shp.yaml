@@ -90,7 +90,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/EventResponse'
 
-  /api/event/global/bulk:
+  /api/event/global/bundle:
     post:
       tags:
         - Event
