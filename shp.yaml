@@ -158,52 +158,15 @@ paths:
         '200':
           description: successfull
   /api/data-reader/measure:
-    get:
+    post:
       tags:
         - Measures
       operationId: dataReaderMeasure
-      parameters:
-        - in: query
-          name: page
-          schema:
-            type: number
-          required: false
-        - in: query
-          name: pageSize
-          schema:
-            type: number
-          required: false
-        - in: query
-          name: start
-          schema:
-            type: string
-            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-            example: "2022-07-19T14:59:58+02:00"
-          required: false
-        - in: query
-          name: end
-          schema:
-            type: string
-            pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
-            example: "2022-07-19T14:59:58+02:00"
-          required: false
-        - in: query
-          name: codes
-          schema:
-            type: array
-            items:
-              type: string
-          required: false
-        - in: query
-          name: sub
-          schema:
-            type: string
-          required: false
-        - in: query
-          name: last
-          schema:
-            type: boolean
-          required: false
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchMeasureRequest'
       responses:
         '200':
           description: successfull
@@ -467,6 +430,30 @@ components:
                 type: string
               value:
                 type: string
+
+    SearchMeasureRequest:
+      type: object
+      properties:
+        last:
+          type: boolean
+        sub:
+          type: string
+        page:
+          type: integer
+        pageSize:
+          type: integer
+        start:
+          type: string
+          pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+          example: "2022-07-19T14:59:58+02:00"
+        end:
+          type: string
+          pattern: '^[1-9][0-9]{3}\-[0-1]?[1-9]\-[0-3]?[0-9]+.+[\+][0-9]{2}\:[0-9]{2}$'
+          example: "2022-07-19T14:59:58+02:00"
+        codes:
+          type: array
+          items:
+            type: string
 
     MeasureRequestBulk:
       type: array
